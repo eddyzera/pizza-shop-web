@@ -5,6 +5,7 @@ import { DayOrdersAmountCard } from './daysOrdersAmount'
 import { MonthCanceledOrdersAmountCard } from './monthCanceledOrdersAmountsCard'
 import { MonthOrdersAmountCard } from './monthOrdersAmountCard'
 import { MonthRevenueCard } from './monthRevenueCard'
+import { PopularProductChart } from './popularProductCharts'
 import { RevenueChart } from './revenueChart'
 
 export const Dashboard: React.FunctionComponent = () => {
@@ -21,6 +22,7 @@ export const Dashboard: React.FunctionComponent = () => {
         </div>
         <div className="grid grid-cols-9 gap-4">
           <RevenueChart />
+          <PopularProductChart />
         </div>
       </div>
     </>

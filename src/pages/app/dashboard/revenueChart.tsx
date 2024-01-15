@@ -4,7 +4,6 @@ import {
   Line,
   LineChart,
   ResponsiveContainer,
-  Tooltip,
   XAxis,
   YAxis,
 } from 'recharts'
@@ -55,6 +54,8 @@ export const RevenueChart: React.FunctionComponent = () => {
                 })
               }
             />
+            <CartesianGrid vertical={false} className="stroke-muted" />
+
             <Line
               type={'linear'}
               strokeWidth={2}
