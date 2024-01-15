@@ -1,17 +1,26 @@
+import { DialogTrigger } from '@radix-ui/react-dialog'
 import { ArrowRight, Search, X } from 'lucide-react'
 import React from 'react'
 
 import { Button } from '@/components/ui/button'
+import { Dialog } from '@/components/ui/dialog'
 import { TableCell, TableRow } from '@/components/ui/table'
+
+import { OrderDetails } from './orderDetails'
 
 export const OrderTableRow: React.FunctionComponent = () => {
   return (
     <TableRow>
       <TableCell>
-        <Button variant={'outline'} size={'xs'}>
-          <Search className="h-3 w-3" />
-          <span className="sr-only">Detalhes do pedido</span>
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant={'outline'} size={'xs'}>
+              <Search className="h-3 w-3" />
+              <span className="sr-only">Detalhes do pedido</span>
+            </Button>
+          </DialogTrigger>
+          <OrderDetails />
+        </Dialog>
       </TableCell>
       <TableCell className="font-mono text-xs font-medium">
         ua8asuda80d00a
