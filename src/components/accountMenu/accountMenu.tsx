@@ -14,16 +14,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
+import { Skeleton } from '../ui/skeleton'
 
 export const AccountMenu: React.FunctionComponent = () => {
-  const { data: profile } = useQuery({
+  const { data: profile, isLoading: isLoadingProfile } = useQuery({
     queryKey: ['profile'],
     queryFn: getProfile,
   })
-  const { data: managedRestaurant } = useQuery({
-    queryKey: ['managed-restaurant'],
-    queryFn: GetManagedRestaurant,
-  })
+  const { data: managedRestaurant, isLoading: isLoadingManagedRestaurant } =
+    useQuery({
+      queryKey: ['managed-restaurant'],
+      queryFn: GetManagedRestaurant,
+    })
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -31,7 +33,11 @@ export const AccountMenu: React.FunctionComponent = () => {
           variant={'outline'}
           className="flex select-none items-center gap-2"
         >
-          {managedRestaurant?.name}
+          {isLoadingManagedRestaurant ? (
+            <Skeleton className="h-4 w-40" />
+          ) : (
+            managedRestaurant?.name
+          )}
           <ChevronDown className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
