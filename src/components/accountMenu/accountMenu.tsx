@@ -22,11 +22,13 @@ export const AccountMenu: React.FunctionComponent = () => {
   const { data: profile, isLoading: isLoadingProfile } = useQuery({
     queryKey: ['profile'],
     queryFn: getProfile,
+    staleTime: Infinity,
   })
   const { data: managedRestaurant, isLoading: isLoadingManagedRestaurant } =
     useQuery({
       queryKey: ['managed-restaurant'],
       queryFn: GetManagedRestaurant,
+      staleTime: Infinity,
     })
   return (
     <Dialog>

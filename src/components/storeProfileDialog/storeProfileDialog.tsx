@@ -1,13 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { GetManagedRestaurant } from '@/api/getManagedRestaurant'
+import { updateProfile } from '@/api/updateProfile'
 
 import { Button } from '../ui/button'
 import {
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -29,9 +32,14 @@ export const StoreProfileDialog: React.FunctionComponent = () => {
   const { data: managedRestaurant } = useQuery({
     queryKey: ['managed-restaurant'],
     queryFn: GetManagedRestaurant,
+    staleTime: Infinity,
   })
 
-  const { register, handleSubmit } = useForm<StoreProfileSchema>({
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<StoreProfileSchema>({
     resolver: zodResolver(storeProfileSchema),
     values: {
       name: managedRestaurant?.name ?? '',
@@ -39,7 +47,21 @@ export const StoreProfileDialog: React.FunctionComponent = () => {
     },
   })
 
-  console.log(`register =>`, register)
+  const { mutateAsync: updateProfileFn } = useMutation({
+    mutationFn: updateProfile,
+  })
+
+  const handleUpdateProfile = async (data: StoreProfileSchema) => {
+    try {
+      await updateProfileFn({
+        name: data.name,
+        description: data.description,
+      })
+      toast.success('Perfil autalizado com successo')
+    } catch (error) {
+      toast.error('Falha ao atualizar perfil, tent novamente')
+    }
+  }
 
   return (
     <DialogContent>
@@ -49,7 +71,7 @@ export const StoreProfileDialog: React.FunctionComponent = () => {
           Atualize as informações do seu estabelecimento visiveis ao seu cliente
         </DialogDescription>
       </DialogHeader>
-      <form action="">
+      <form onSubmit={handleSubmit(handleUpdateProfile)}>
         <div className="space-y-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label className="text-right" htmlFor="name">
@@ -70,10 +92,12 @@ export const StoreProfileDialog: React.FunctionComponent = () => {
           </div>
         </div>
         <DialogFooter>
-          <Button variant="ghost" type="button">
-            Cancelar
-          </Button>
-          <Button type="submit" variant="success">
+          <DialogClose asChild>
+            <Button variant="ghost" type="button">
+              Cancelar
+            </Button>
+          </DialogClose>
+          <Button type="submit" variant="success" disabled={isSubmitting}>
             Salvar
           </Button>
         </DialogFooter>
